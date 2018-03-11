@@ -1,0 +1,5 @@
+snow (0.0.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Philippe Coval <rzr@users.sf.net>  Sun, 11 Mar 2018 15:10:31 +0100
