@@ -1,5 +1,5 @@
 Source: snow
-Section: unknown
+Section: extra
 Priority: optional
 Maintainer: Philippe Coval <rzr@users.sf.net>
 Build-Depends: debhelper (>= 9)
