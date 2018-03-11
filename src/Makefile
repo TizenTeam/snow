@@ -40,7 +40,7 @@ $(SDNS_OBJS): $(SDNS_DEPS) .sdns
 .nss_snow:
 	$(MAKE) -C nss_snow
 
-install: all
+install/root:
 	@if ! id $(SNOW_USER);\
 		then echo creating user $(SNOW_USER);\
 		useradd -r -s $(NOLOGIN) -M -d $(SNOWVAR) -- $(SNOW_USER);\
@@ -49,8 +49,13 @@ install: all
 		then echo creating user $(SDNS_USER);\
 		useradd -r -s $(NOLOGIN) -M -d $(SDNSCONFDIR) -- $(SDNS_USER);\
 	fi
-	$(INSTALL) -d $(SNOWCONFDIR)
+	$(INSTALL) -d $(SNOWVAR)
 	$(INSTALL) -m 0700 -o $(SNOW_USER) -g $(SNOW_USER) -d $(SNOWVAR)
+	$(INSTALL) -m 0600 -o $(SNOW_USER) -g $(SNOW_USER) ../known_peers $(SNOWVAR)
+
+install: all
+	[ "0" != "${EUID}" ] || ${MAKE} install/root
+	$(INSTALL) -d $(SNOWCONFDIR)
 	$(INSTALL) -d $(SDNSCONFDIR)
 	$(INSTALL) -d $(SDNSFWDDIR)
 	$(INSTALL) -d $(SBIN)
@@ -59,7 +64,6 @@ install: all
 	$(INSTALL) -m 0444 -o root -g root $(SDNS_ROOTHINTS) $(SDNSCONFDIR)
 	cp -n -- $(SDNS_LOCALNAMES) $(SDNSCONFDIR)
 	$(INSTALL) -d $(SNOWVAR)
-	$(INSTALL) -m 0600 -o $(SNOW_USER) -g $(SNOW_USER) ../known_peers $(SNOWVAR)
 	echo >> $(SNOWCONFDIR)/snow.conf
 	echo SNOW_USER=$(SNOW_USER) >> $(SNOWCONFDIR)/snow.conf
 	echo >> $(SDNSCONFDIR)/sdns.conf
